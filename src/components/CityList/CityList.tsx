@@ -1,37 +1,24 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { useAppDispatch } from '../../store/appDispatch';
 import { useEffect, useState } from 'react';
-import { fetchCityList } from '../../store/api';
+import { fetchCityList, fetchDataFromFireStore } from '../../store/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { getDocs } from 'firebase/firestore';
 import { colRef } from '../../dbFirestore';
 
 export const CityList = () => {
-  // const dispatch = useAppDispatch();
-  // const list = useSelector((state: RootState) => state.softGeneration.city);
+  const dispatch = useAppDispatch();
+  const data = useSelector((state: RootState) => state.softGeneration.test);
+  const isLoading = useSelector((state: RootState) => state.softGeneration.isLoadingTest);
+  console.log('data', data);
 
   // useEffect(() => {
   //   dispatch(fetchCityList());
   // }, []);
 
-  const [data, setData] = useState();
-
   useEffect(() => {
-    getDocs(colRef)
-      .then((snapshot) => {
-        const result = [];
-        snapshot.docs.forEach((doc) => {
-          result.push({ ...doc.data(), id: doc.id });
-        });
-        // console.log('result', result);
-
-        setData(result);
-      })
-
-      .catch((error) => {
-        console.log(error);
-      });
+    dispatch(fetchDataFromFireStore());
   }, []);
   return (
     <Container>
@@ -39,12 +26,16 @@ export const CityList = () => {
         <Col lg={4}>test</Col>
 
         <Col lg={4}>
-          {data?.map((item) => (
-            <>
-              <span key={item.id}>{item.title} - </span>
-              <span key={item.id}>{item.age} </span>
-            </>
-          ))}
+          {isLoading ? (
+            <p>Loading</p>
+          ) : (
+            data?.map((item) => (
+              <>
+                <span key={item.id}>{item.title} - </span>
+                <span key={item.id}>{item.age} </span>
+              </>
+            ))
+          )}
         </Col>
 
         <Col lg={4}>test</Col>
