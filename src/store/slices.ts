@@ -7,18 +7,20 @@ export interface IState {
   // isLoadingCity: boolean,
   // isLoadingdetailCity: boolean,
   // errorCity: string | null;
+  currentUser: any
   wishListCities: any[] | undefined,
   isLoadingWishListCities: boolean,
   errorWishListCities: string | null;
 }
 
 const initialState: IState = {
-  wishListCities: [],
   // city: [],
   // detailCity: [],
   // isLoadingCity: false,
   // isLoadingdetailCity: false,
   // errorCity: null,
+  currentUser: [],
+  wishListCities: [],
   isLoadingWishListCities: false,
   errorWishListCities: null
 }
@@ -29,6 +31,10 @@ export const softGenerationSlice = createSlice({
   reducers: {
     testReducer: (state, action) => {
       // state.test = action.payload
+    },
+
+    addCurrentUser: (state, action) => {
+      state.currentUser = action.payload
     },
   },
 
@@ -73,5 +79,5 @@ export const softGenerationSlice = createSlice({
   }
 })
 
-export const { testReducer } = softGenerationSlice.actions
+export const { testReducer, addCurrentUser } = softGenerationSlice.actions
 export default softGenerationSlice.reducer

@@ -1,8 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { ICity } from '../types/types'
 import { getDocs } from 'firebase/firestore'
-import { test } from './slices'
-import { useAppDispatch } from '../store/appDispatch'
 import { collection } from 'firebase/firestore'
 import { dbFirestore } from '../dbFirestore'
 

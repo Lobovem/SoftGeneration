@@ -1,12 +1,16 @@
-import { getAuth, signInWithPopup, signOut } from 'firebase/auth';
-import { useState } from 'react';
-import { app, googleAuthProvider } from '../../firebase';
+import { signInWithPopup, signOut } from 'firebase/auth';
+import { useEffect } from 'react';
+import { auth, googleAuthProvider } from '../../firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { dbFirestore } from '../../dbFirestore';
+import { useAppDispatch } from '../../store/appDispatch';
+import { addCurrentUser } from '../../store/slices';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
 
 export const AuthProvider = () => {
-  const auth = getAuth(app);
-  const [userrr, setUser] = useState<string | null>(null);
+  const dispatch = useAppDispatch();
+  const currentUser = useSelector((state: RootState) => state.softGeneration.currentUser);
 
   const saveDataToFirestore = async () => {
     await addDoc(collection(dbFirestore, 'wishListCities'), {
@@ -16,36 +20,25 @@ export const AuthProvider = () => {
     alert('add to base');
   };
 
-  // useEffect(() => {
-  const signIn = () =>
-    signInWithPopup(auth, googleAuthProvider)
-      .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        // const credential = GoogleAuthProvider.credentialFromResult(result);
-        // const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        // IdP data available using getAdditionalUserInfo(result)
-        setUser(user.displayName);
-        // ...
-      })
-      .catch((error) => {
-        // Handle Errors here.
-        // const errorCode = error.code;
-        // const errorMessage = error.message;
-        // // The email of the user's account used.
-        // const email = error.customData.email;
-        // // The AuthCredential type that was used.
-        // const credential = GoogleAuthProvider.credentialFromError(error);
-        console.log(error);
+  useEffect(() => {
+    const unsub = auth.onAuthStateChanged((maybeUser) => {
+      if (maybeUser != null) {
+        return dispatch(addCurrentUser(maybeUser));
+      }
+    });
+    return unsub;
+  }, [dispatch]);
 
-        // ...
-      });
+  const signIn = () => {
+    signInWithPopup(auth, googleAuthProvider)
+      .then((credentials) => dispatch(addCurrentUser(credentials.user)))
+      .catch((e) => console.log(e));
+  };
 
   const exit = () =>
     signOut(auth)
       .then(() => {
-        setUser(null);
+        dispatch(addCurrentUser(null));
       })
       .catch((error) => {
         console.log(error);
@@ -53,7 +46,7 @@ export const AuthProvider = () => {
 
   return (
     <div>
-      <div>{userrr != null && <p>{userrr}</p>} </div>
+      <div>{currentUser != null && <p>{currentUser.displayName}</p>} </div>
       <button onClick={signIn}>Sign In</button>
       <button onClick={exit}>Sign Out</button>
       <button onClick={saveDataToFirestore}>safe</button>
