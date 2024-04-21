@@ -1,15 +1,15 @@
 import { getAuth, signInWithPopup, signOut } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { app, googleAuthProvider } from '../../firebase';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
-import { colRef, dbFirestore } from '../../dbFirestore';
+import { addDoc, collection } from 'firebase/firestore';
+import { dbFirestore } from '../../dbFirestore';
 
 export const AuthProvider = () => {
   const auth = getAuth(app);
   const [userrr, setUser] = useState<string | null>(null);
 
   const saveDataToFirestore = async () => {
-    const docRef = await addDoc(collection(dbFirestore, 'childrens'), {
+    await addDoc(collection(dbFirestore, 'wishListCities'), {
       title: 'Kira',
       age: 6,
     });

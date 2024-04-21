@@ -1,26 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { fetchCityList, fetchDataFromFireStore } from './api';
+import { fetchWishListCitiesFromFireStore } from './api';
 
 export interface IState {
-  test: any[] | undefined,
-  city: ICity[];
-  detailCity: ICity[],
-  isLoadingCity: boolean,
-  isLoadingTest: boolean,
-  isLoadingdetailCity: boolean,
-  errorCity: string | null;
-  errorDetailCity: string | null;
+  // city: ICity[];
+  // detailCity: ICity[],
+  // isLoadingCity: boolean,
+  // isLoadingdetailCity: boolean,
+  // errorCity: string | null;
+  wishListCities: any[] | undefined,
+  isLoadingWishListCities: boolean,
+  errorWishListCities: string | null;
 }
 
 const initialState: IState = {
-  test: [],
-  city: [],
-  detailCity: [],
-  isLoadingCity: false,
-  isLoadingdetailCity: false,
-  isLoadingTest: false,
-  errorCity: null,
-  errorDetailCity: null
+  wishListCities: [],
+  // city: [],
+  // detailCity: [],
+  // isLoadingCity: false,
+  // isLoadingdetailCity: false,
+  // errorCity: null,
+  isLoadingWishListCities: false,
+  errorWishListCities: null
 }
 
 export const softGenerationSlice = createSlice({
@@ -33,40 +33,42 @@ export const softGenerationSlice = createSlice({
   },
 
   extraReducers: (builder) => {
+    // builder
+    //   .addCase(fetchCityList.pending, (state) => {
+    //     state.isLoadingCity = true;
+    //     state.errorCity = null;
+    //   })
+
+    //   .addCase(fetchCityList.fulfilled, (state, action) => {
+    //     state.isLoadingCity = false;
+    //     state.errorCity = null;
+    //     state.city = action.payload
+    //   })
+
+    //   .addCase(fetchCityList.rejected, (state, action) => {
+    //     state.isLoadingCity = false;
+    //     state.errorCity = action.error.message ?? 'Failed to fetch city list';
+    //   })
+
+
+
     builder
-      .addCase(fetchCityList.pending, (state) => {
-        state.isLoadingCity = true;
-        state.errorCity = null;
+      .addCase(fetchWishListCitiesFromFireStore.pending, (state) => {
+        state.isLoadingWishListCities = true;
+        state.errorWishListCities = null;
       })
 
-      .addCase(fetchCityList.fulfilled, (state, action) => {
-        state.isLoadingCity = false;
-        state.errorCity = null;
-        state.city = action.payload
-      })
-
-      .addCase(fetchCityList.rejected, (state, action) => {
-        state.isLoadingCity = false;
-        state.errorCity = action.error.message ?? 'Failed to fetch city list';
-      })
-
-    builder
-      .addCase(fetchDataFromFireStore.pending, (state) => {
-        state.isLoadingTest = true;
-        state.errorCity = null;
-      })
-
-      .addCase(fetchDataFromFireStore.fulfilled, (state, action) => {
-        state.isLoadingTest = false;
-        state.errorCity = null;
-        state.test = action.payload
+      .addCase(fetchWishListCitiesFromFireStore.fulfilled, (state, action) => {
+        state.isLoadingWishListCities = false;
+        state.errorWishListCities = null;
+        state.wishListCities = action.payload
         console.log(action.payload);
 
       })
 
-      .addCase(fetchDataFromFireStore.rejected, (state, action) => {
-        state.isLoadingTest = false;
-        state.errorCity = action.error.message ?? 'Failed to fetch city list';
+      .addCase(fetchWishListCitiesFromFireStore.rejected, (state, action) => {
+        state.isLoadingWishListCities = false;
+        state.errorWishListCities = action.error.message ?? 'Failed to fetch wish list cities';
       })
   }
 })

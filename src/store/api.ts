@@ -1,9 +1,10 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { ICity } from '../types/types'
 import { getDocs } from 'firebase/firestore'
-import { colRef } from '../dbFirestore'
 import { test } from './slices'
 import { useAppDispatch } from '../store/appDispatch'
+import { collection } from 'firebase/firestore'
+import { dbFirestore } from '../dbFirestore'
 
 const API_URL: string = "https://openweathermap.org/"
 
@@ -45,17 +46,15 @@ export const fetchCityDetail = createAsyncThunk(
     }
   })
 
-export const fetchDataFromFireStore = createAsyncThunk("dataFromFireStore", async () => {
+export const fetchWishListCitiesFromFireStore = createAsyncThunk("dataFromFireStore", async () => {
 
   try {
-    const querySnapShot = await getDocs(colRef);
-    const result = [];
-    querySnapShot.docs.forEach((doc) => {
-      result.push({ ...doc.data(), id: doc.id });
-    });
+    const citiesCol = collection(dbFirestore, 'wishListCities');
+    const citySnapshot = await getDocs(citiesCol);
+    const cityList = citySnapshot.docs.map(doc => doc.data());
+    return cityList;
 
-    return result
-    // dispatch(test(result))
+
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }

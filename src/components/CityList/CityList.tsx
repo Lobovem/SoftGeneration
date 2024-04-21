@@ -1,25 +1,23 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import { useAppDispatch } from '../../store/appDispatch';
-import { useEffect, useState } from 'react';
-import { fetchCityList, fetchDataFromFireStore } from '../../store/api';
+import { useEffect } from 'react';
+import { fetchWishListCitiesFromFireStore } from '../../store/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import { getDocs } from 'firebase/firestore';
-import { colRef } from '../../dbFirestore';
 
 export const CityList = () => {
   const dispatch = useAppDispatch();
-  const data = useSelector((state: RootState) => state.softGeneration.test);
-  const isLoading = useSelector((state: RootState) => state.softGeneration.isLoadingTest);
-  console.log('data', data);
-
-  // useEffect(() => {
-  //   dispatch(fetchCityList());
-  // }, []);
+  const wishListCities = useSelector(
+    (state: RootState) => state.softGeneration.wishListCities
+  );
+  const isLoading = useSelector(
+    (state: RootState) => state.softGeneration.isLoadingWishListCities
+  );
 
   useEffect(() => {
-    dispatch(fetchDataFromFireStore());
-  }, []);
+    dispatch(fetchWishListCitiesFromFireStore());
+  }, [dispatch]);
+
   return (
     <Container>
       <Row>
@@ -29,11 +27,11 @@ export const CityList = () => {
           {isLoading ? (
             <p>Loading</p>
           ) : (
-            data?.map((item) => (
-              <>
-                <span key={item.id}>{item.title} - </span>
-                <span key={item.id}>{item.age} </span>
-              </>
+            wishListCities?.map((item) => (
+              <div key={item.id}>
+                <div>{item.title}</div>
+                <div>{item.age} </div>
+              </div>
             ))
           )}
         </Col>
