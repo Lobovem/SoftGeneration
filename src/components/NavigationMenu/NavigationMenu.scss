@@ -1,0 +1,29 @@
+.navigationMenu {
+  gap: 10px;
+  font-size: 14px;
+  flex-direction: column;
+
+  &__link {
+    color: black;
+    font-weight: 500;
+    padding: 2px;
+    text-decoration: none;
+
+    &:hover {
+      color: gray;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+
+    }
+
+    &_active {
+      color: green;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+
+      &:hover {
+        color: green;
+      }
+    }
+  }
+}

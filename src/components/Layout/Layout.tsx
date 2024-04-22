@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { Header } from '../Header/Header';
 import { Outlet } from 'react-router-dom';
 import './Layout.scss';
+import { NavigationBar } from '../NavigationBar/NavigationBar';
 
 export const Layout: FC = () => {
   return (
@@ -11,7 +12,11 @@ export const Layout: FC = () => {
       <main className="main">
         <Container>
           <Row>
-            <Col lg={12}>
+            <Col lg={2} className="leftSide">
+              <NavigationBar />
+            </Col>
+
+            <Col lg={10}>
               <Outlet />
             </Col>
           </Row>

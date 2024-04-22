@@ -1,6 +1,5 @@
-import { signInWithPopup, signOut } from 'firebase/auth';
 import { useEffect } from 'react';
-import { auth, dbFirestore, googleAuthProvider } from '../../firebase';
+import { auth, dbFirestore } from '../../firebase';
 import { useAppDispatch } from '../../store/appDispatch';
 import { addCurrentUser } from '../../store/slices';
 import { useSelector } from 'react-redux';
@@ -42,27 +41,8 @@ export const AuthProvider = () => {
     return unsub;
   }, [dispatch]);
 
-  const signIn = () => {
-    signInWithPopup(auth, googleAuthProvider)
-      .then((credentials) => dispatch(addCurrentUser(credentials.user)))
-      .catch((e) => console.log(e));
-  };
-
-  const exit = () =>
-    signOut(auth)
-      .then(() => {
-        dispatch(addCurrentUser(null));
-      })
-
-      .catch((error) => {
-        console.log(error);
-      });
-
   return (
     <div>
-      <div>{currentUser != null && <p>{currentUser.displayName}</p>} </div>
-      <button onClick={signIn}>Sign In</button>
-      <button onClick={exit}>Sign Out</button>
       <button onClick={addCityToFirestore}>safe</button>
     </div>
   );
